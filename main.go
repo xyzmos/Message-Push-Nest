@@ -11,6 +11,7 @@ import (
 	"message-nest/routers"
 	"message-nest/service/cron_msg_service"
 	"message-nest/service/cron_service"
+	"mime"
 	"net/http"
 	"os"
 
@@ -27,6 +28,11 @@ var (
 )
 
 func init() {
+	_ = mime.AddExtensionType(".js", "application/javascript")
+	_ = mime.AddExtensionType(".mjs", "application/javascript")
+	_ = mime.AddExtensionType(".css", "text/css")
+	_ = mime.AddExtensionType(".map", "application/json")
+
 	constant.InitReleaseInfo(rf)
 	setting.Setup()
 	logging.Setup()
