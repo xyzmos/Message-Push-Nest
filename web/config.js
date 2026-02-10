@@ -1,6 +1,6 @@
 // config.js
 
-const isProduction = process.env.NODE_ENV === 'prod';
+const isProduction = process.env.NODE_ENV === 'prod' || process.env.NODE_ENV === 'production';
 
 // 从 window 对象获取路径前缀（由后端注入或通过 API 获取）
 const getPathPrefix = () => {
