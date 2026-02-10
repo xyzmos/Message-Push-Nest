@@ -44,7 +44,7 @@ FROM debian:stable-slim
 ENV TZ=Asia/Shanghai
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata \
+    && apt-get install -y ca-certificates tzdata mailcap \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app

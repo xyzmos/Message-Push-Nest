@@ -11,6 +11,7 @@ import (
 	"message-nest/routers"
 	"message-nest/service/cron_msg_service"
 	"message-nest/service/cron_service"
+	"mime"
 	"net/http"
 	"os"
 
@@ -27,6 +28,10 @@ var (
 )
 
 func init() {
+	// 设置 mime 类型，防止 docker 镜像中缺少 mime 类型导致 js 文件加载失败
+	mime.AddExtensionType(".js", "application/javascript")
+	mime.AddExtensionType(".css", "text/css")
+	
 	constant.InitReleaseInfo(rf)
 	setting.Setup()
 	logging.Setup()

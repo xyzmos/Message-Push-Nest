@@ -73,7 +73,7 @@ func AppendServerStaticHtmlWithPrefix(router gin.IRouter, f embed.FS, pathPrefix
 		// 无路径前缀时，使用原有逻辑
 		if r, ok := router.(*gin.Engine); ok {
 			r.Use(middleware.StaticCacheMiddleware())
-			r.StaticFS("assets/", http.FS(assets))
+			r.StaticFS("/assets", http.FS(assets))
 			r.GET("/", func(ctx *gin.Context) {
 				ctx.FileFromFS("/", http.FS(dist))
 			})
