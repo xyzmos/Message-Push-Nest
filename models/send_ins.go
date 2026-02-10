@@ -33,6 +33,10 @@ type InsDtalkConfig struct {
 type InsQyWeiXinConfig struct {
 }
 
+type InsWeChatCorpAccountConfig struct {
+	ToAccount string `json:"to_account" validate:"required,max=200" label:"接收者UserId"`
+}
+
 // InsFeishuConfig 实例里面的飞书config
 type InsFeishuConfig struct {
 }

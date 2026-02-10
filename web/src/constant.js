@@ -77,6 +77,34 @@ const CONSTANT = {
             ],
         },
         {
+            type: 'WeChatCorpAccount',
+            label: '企业微信应用',
+            dynamicRecipient: {
+                support: true,
+                field: 'to_account',
+                label: '接收者UserId',
+                desc: 'UserId',
+            },
+            inputs: [
+                { subLabel: 'corp_id', value: '', col: 'corp_id', desc: "企业微信企业ID（CorpID）" },
+                { subLabel: 'agent_id', value: '', col: 'agent_id', desc: "企业微信应用AgentId（数字）" },
+                { subLabel: 'agent_secret', value: '', col: 'agent_secret', desc: "企业微信应用Secret" },
+                { subLabel: 'proxy_url', value: '', col: 'proxy_url', desc: "可选：代理地址，支持 http://、https://、socks5://" },
+                { subLabel: '渠道名', value: '', col: 'name', desc: "想要设置的渠道名字" },
+            ],
+            tips: {
+                text: "企业微信应用说明",
+                desc: "通过企业微信应用消息接口发送消息，需要配置 CorpID / AgentId / Secret。可选 proxy_url 用于 http/https/socks5 代理。"
+            },
+            taskInsRadios: [
+                { subLabel: 'text', content: 'text' },
+                { subLabel: 'markdown', content: 'markdown' },
+            ],
+            taskInsInputs: [
+                { value: '', col: 'to_account', desc: '接收者UserId', label: '接收者UserId' },
+            ],
+        },
+        {
             type: 'Feishu',
             label: '飞书机器人',
             inputs: [

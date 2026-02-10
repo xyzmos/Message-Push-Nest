@@ -58,6 +58,24 @@ func (sw *SendTaskInsService) ValidateDiffIns(ins models.SendTasksIns) (string, 
 		var Config models.InsQyWeiXinConfig
 		return "", Config
 	}
+	if ins.WayType == constant.MessageTypeWeChatCorpAccount {
+		var Config models.InsWeChatCorpAccountConfig
+		err := json.Unmarshal([]byte(ins.Config), &Config)
+		if err != nil {
+			return "企业微信应用发送配置反序列化失败！", empty
+		}
+
+		var configMap map[string]interface{}
+		json.Unmarshal([]byte(ins.Config), &configMap)
+		allowMultiRecip, exists := configMap["allowMultiRecip"].(bool)
+
+		if exists && allowMultiRecip && Config.ToAccount == "" {
+			return "", Config
+		}
+
+		_, Msg := app.CommonPlaygroundValid(Config)
+		return Msg, Config
+	}
 	if ins.WayType == constant.MessageTypeFeishu {
 		var Config models.InsFeishuConfig
 		return "", Config

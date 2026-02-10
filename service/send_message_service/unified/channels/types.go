@@ -13,6 +13,7 @@ const (
 	MessageTypeEmail           = constant.MessageTypeEmail
 	MessageTypeDtalk           = constant.MessageTypeDtalk
 	MessageTypeQyWeiXin        = constant.MessageTypeQyWeiXin
+	MessageTypeWeChatCorpAccount = constant.MessageTypeWeChatCorpAccount
 	MessageTypeFeishu          = constant.MessageTypeFeishu
 	MessageTypeCustom          = constant.MessageTypeCustom
 	MessageTypeWeChatOFAccount = constant.MessageTypeWeChatOFAccount

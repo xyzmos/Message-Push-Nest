@@ -438,6 +438,7 @@ func (sm *SendMessageService) supportsDynamicRecipient(wayType string) bool {
 	supportedTypes := map[string]bool{
 		constant.MessageTypeEmail:           true,
 		constant.MessageTypeWeChatOFAccount: true,
+		constant.MessageTypeWeChatCorpAccount: true,
 		constant.MessageTypeAliyunSMS:       true,
 		// 可以继续添加其他支持动态接收者的渠道
 	}

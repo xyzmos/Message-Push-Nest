@@ -207,6 +207,9 @@ const getFinalData = () => {
         if (config.type == 'Email' && input.col == 'port') {
           authData[input.col] = parseInt(formData.value[input.col])
         }
+        if (config.type == 'WeChatCorpAccount' && input.col == 'agent_id') {
+          authData[input.col] = parseInt(formData.value[input.col])
+        }
       }
     })
   }
@@ -259,6 +262,7 @@ const getChannelIcon = (type: string) => {
     'Email': Mail,
     'Dtalk': MessageSquare,
     'QyWeiXin': MessageCircle,
+    'WeChatCorpAccount': MessageCircle,
     'Feishu': Send,
     'Custom': Webhook,
     'WeChatOFAccount': MessageCircleCode,

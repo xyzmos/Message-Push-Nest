@@ -18,17 +18,18 @@ const (
 	FormatTypeHTML     = channels.FormatTypeHTML
 	FormatTypeMarkdown = channels.FormatTypeMarkdown
 
-	MessageTypeEmail           = channels.MessageTypeEmail
-	MessageTypeDtalk           = channels.MessageTypeDtalk
-	MessageTypeQyWeiXin        = channels.MessageTypeQyWeiXin
-	MessageTypeFeishu          = channels.MessageTypeFeishu
-	MessageTypeCustom          = channels.MessageTypeCustom
-	MessageTypeWeChatOFAccount = channels.MessageTypeWeChatOFAccount
-	MessageTypeMessageNest     = channels.MessageTypeMessageNest
-	MessageTypeAliyunSMS       = channels.MessageTypeAliyunSMS
-	MessageTypeTelegram        = channels.MessageTypeTelegram
-	MessageTypeBark            = channels.MessageTypeBark
-	MessageTypePushMe          = channels.MessageTypePushMe
+	MessageTypeEmail             = channels.MessageTypeEmail
+	MessageTypeDtalk             = channels.MessageTypeDtalk
+	MessageTypeQyWeiXin          = channels.MessageTypeQyWeiXin
+	MessageTypeWeChatCorpAccount = channels.MessageTypeWeChatCorpAccount
+	MessageTypeFeishu            = channels.MessageTypeFeishu
+	MessageTypeCustom            = channels.MessageTypeCustom
+	MessageTypeWeChatOFAccount   = channels.MessageTypeWeChatOFAccount
+	MessageTypeMessageNest       = channels.MessageTypeMessageNest
+	MessageTypeAliyunSMS         = channels.MessageTypeAliyunSMS
+	MessageTypeTelegram          = channels.MessageTypeTelegram
+	MessageTypeBark              = channels.MessageTypeBark
+	MessageTypePushMe            = channels.MessageTypePushMe
 )
 
 // ChannelRegistry 渠道注册表
@@ -97,6 +98,7 @@ func GetGlobalChannelRegistry() *ChannelRegistry {
 		globalChannelRegistry.Register(channels.NewEmailChannel())
 		globalChannelRegistry.Register(channels.NewDtalkChannel())
 		globalChannelRegistry.Register(channels.NewQyWeiXinChannel())
+		globalChannelRegistry.Register(channels.NewWeChatCorpAccountChannel())
 		globalChannelRegistry.Register(channels.NewFeishuChannel())
 		globalChannelRegistry.Register(channels.NewCustomChannel())
 		globalChannelRegistry.Register(channels.NewWeChatOFAccountChannel())

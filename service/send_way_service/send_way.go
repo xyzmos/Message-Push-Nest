@@ -37,30 +37,32 @@ type WayTester interface {
 // 渠道注册表
 var (
 	validatorRegistry = map[string]func() WayValidator{
-		constant.MessageTypeEmail:           func() WayValidator { return &WayDetailEmail{} },
-		constant.MessageTypeDtalk:           func() WayValidator { return &WayDetailDTalk{} },
-		constant.MessageTypeQyWeiXin:        func() WayValidator { return &WayDetailQyWeiXin{} },
-		constant.MessageTypeFeishu:          func() WayValidator { return &WayDetailFeishu{} },
-		constant.MessageTypeCustom:          func() WayValidator { return &WayDetailCustom{} },
-		constant.MessageTypeWeChatOFAccount: func() WayValidator { return &WeChatOFAccount{} },
-		constant.MessageTypeMessageNest:     func() WayValidator { return &MessageNest{} },
-		constant.MessageTypeAliyunSMS:       func() WayValidator { return &WayDetailAliyunSMS{} },
-		constant.MessageTypeTelegram:        func() WayValidator { return &WayDetailTelegram{} },
-		constant.MessageTypeBark:            func() WayValidator { return &WayDetailBark{} },
-		constant.MessageTypePushMe:          func() WayValidator { return &WayDetailPushMe{} },
+		constant.MessageTypeEmail:             func() WayValidator { return &WayDetailEmail{} },
+		constant.MessageTypeDtalk:             func() WayValidator { return &WayDetailDTalk{} },
+		constant.MessageTypeQyWeiXin:          func() WayValidator { return &WayDetailQyWeiXin{} },
+		constant.MessageTypeWeChatCorpAccount: func() WayValidator { return &WayDetailWeChatCorpAccount{} },
+		constant.MessageTypeFeishu:            func() WayValidator { return &WayDetailFeishu{} },
+		constant.MessageTypeCustom:            func() WayValidator { return &WayDetailCustom{} },
+		constant.MessageTypeWeChatOFAccount:   func() WayValidator { return &WeChatOFAccount{} },
+		constant.MessageTypeMessageNest:       func() WayValidator { return &MessageNest{} },
+		constant.MessageTypeAliyunSMS:         func() WayValidator { return &WayDetailAliyunSMS{} },
+		constant.MessageTypeTelegram:          func() WayValidator { return &WayDetailTelegram{} },
+		constant.MessageTypeBark:              func() WayValidator { return &WayDetailBark{} },
+		constant.MessageTypePushMe:            func() WayValidator { return &WayDetailPushMe{} },
 	}
 	testerRegistry = map[string]func(interface{}) WayTester{
-		constant.MessageTypeEmail:           func(m interface{}) WayTester { return m.(*WayDetailEmail) },
-		constant.MessageTypeDtalk:           func(m interface{}) WayTester { return m.(*WayDetailDTalk) },
-		constant.MessageTypeQyWeiXin:        func(m interface{}) WayTester { return m.(*WayDetailQyWeiXin) },
-		constant.MessageTypeFeishu:          func(m interface{}) WayTester { return m.(*WayDetailFeishu) },
-		constant.MessageTypeCustom:          func(m interface{}) WayTester { return m.(*WayDetailCustom) },
-		constant.MessageTypeWeChatOFAccount: func(m interface{}) WayTester { return m.(*WeChatOFAccount) },
-		constant.MessageTypeMessageNest:     func(m interface{}) WayTester { return m.(*MessageNest) },
-		constant.MessageTypeAliyunSMS:       func(m interface{}) WayTester { return m.(*WayDetailAliyunSMS) },
-		constant.MessageTypeTelegram:        func(m interface{}) WayTester { return m.(*WayDetailTelegram) },
-		constant.MessageTypeBark:            func(m interface{}) WayTester { return m.(*WayDetailBark) },
-		constant.MessageTypePushMe:          func(m interface{}) WayTester { return m.(*WayDetailPushMe) },
+		constant.MessageTypeEmail:             func(m interface{}) WayTester { return m.(*WayDetailEmail) },
+		constant.MessageTypeDtalk:             func(m interface{}) WayTester { return m.(*WayDetailDTalk) },
+		constant.MessageTypeQyWeiXin:          func(m interface{}) WayTester { return m.(*WayDetailQyWeiXin) },
+		constant.MessageTypeWeChatCorpAccount: func(m interface{}) WayTester { return m.(*WayDetailWeChatCorpAccount) },
+		constant.MessageTypeFeishu:            func(m interface{}) WayTester { return m.(*WayDetailFeishu) },
+		constant.MessageTypeCustom:            func(m interface{}) WayTester { return m.(*WayDetailCustom) },
+		constant.MessageTypeWeChatOFAccount:   func(m interface{}) WayTester { return m.(*WeChatOFAccount) },
+		constant.MessageTypeMessageNest:       func(m interface{}) WayTester { return m.(*MessageNest) },
+		constant.MessageTypeAliyunSMS:         func(m interface{}) WayTester { return m.(*WayDetailAliyunSMS) },
+		constant.MessageTypeTelegram:          func(m interface{}) WayTester { return m.(*WayDetailTelegram) },
+		constant.MessageTypeBark:              func(m interface{}) WayTester { return m.(*WayDetailBark) },
+		constant.MessageTypePushMe:            func(m interface{}) WayTester { return m.(*WayDetailPushMe) },
 	}
 )
 
@@ -145,6 +147,37 @@ func (w *WayDetailQyWeiXin) Test() (string, string) {
 		return fmt.Sprintf("发送失败：%s", err), string(res)
 	}
 	return "", string(res)
+}
+
+type WayDetailWeChatCorpAccount struct {
+	CorpID      string `json:"corp_id" validate:"required,max=100" label:"企业微信CorpID"`
+	AgentID     int    `json:"agent_id" validate:"required,min=1" label:"企业微信AgentID"`
+	AgentSecret string `json:"agent_secret" validate:"required,max=200" label:"企业微信AgentSecret"`
+	ProxyURL    string `json:"proxy_url" validate:"max=200" label:"代理地址"`
+}
+
+func (w *WayDetailWeChatCorpAccount) Validate(authJson string) (string, interface{}) {
+	var empty interface{}
+	err := json.Unmarshal([]byte(authJson), w)
+	if err != nil {
+		return "企业微信应用auth反序列化失败！", empty
+	}
+	_, msg := app.CommonPlaygroundValid(*w)
+	return msg, w
+}
+
+func (w *WayDetailWeChatCorpAccount) Test() (string, string) {
+	cli := message.WeChatCorpAccount{
+		CorpID:      w.CorpID,
+		AgentID:     w.AgentID,
+		AgentSecret: w.AgentSecret,
+		ProxyURL:    w.ProxyURL,
+	}
+	_, err := cli.GetAccessToken()
+	if err != nil {
+		return fmt.Sprintf("连接失败：%s", err.Error()), ""
+	}
+	return "", "access_token获取成功"
 }
 
 // WayDetailFeishu 飞书渠道明细字段
