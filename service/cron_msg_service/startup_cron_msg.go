@@ -75,7 +75,7 @@ func CronMsgSendF(msg models.CronMessages) {
 	taskData, _ := sender.SendPreCheck()
 	_, err = sender.Send(taskData)
 	if err != nil {
-		logrus.Error("执行定时消息失败：%s", err.Error())
+		logrus.Errorf("执行定时消息失败：%s", err.Error())
 		return
 	}
 }

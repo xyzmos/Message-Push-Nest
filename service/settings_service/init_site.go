@@ -19,7 +19,7 @@ func (es *InitSettingService) CommonAddSetting(section string, key string, value
 			Value:   value,
 		})
 		if err != nil {
-			logrus.Error("初始化%s:%s失败", section, key)
+			logrus.Errorf("初始化%s:%s失败", section, key)
 		} else {
 			logrus.Infof("初始化%s:%s成功", section, key)
 		}

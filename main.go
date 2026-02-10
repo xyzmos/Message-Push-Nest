@@ -71,10 +71,10 @@ func main() {
 
 	logrus.WithFields(logrus.Fields{
 		"prefix": fmt.Sprintf("[PID:%d]", os.Getpid()),
-	}).Infof(startInfo)
+	}).Info(startInfo)
 
 	err := server.ListenAndServe()
 	if err != nil {
-		logrus.Errorf("Server err: ", err)
+		logrus.Errorf("Server err: %v", err)
 	}
 }
