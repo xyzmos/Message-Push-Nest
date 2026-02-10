@@ -20,7 +20,7 @@ import (
 )
 
 var (
-	//go:embed web/dist/*
+	//go:embed all:web/dist
 	f embed.FS
 
 	//go:embed .release*
