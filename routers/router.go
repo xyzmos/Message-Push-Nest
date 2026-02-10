@@ -3,16 +3,17 @@ package routers
 import (
 	"embed"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"io"
 	"io/fs"
 	"message-nest/middleware"
 	"message-nest/pkg/setting"
 	"message-nest/routers/api"
-	"message-nest/routers/api/v1"
-	"message-nest/routers/api/v2"
+	v1 "message-nest/routers/api/v1"
+	v2 "message-nest/routers/api/v2"
 	"net/http"
 	"strings"
+
+	"github.com/gin-gonic/gin"
 )
 
 // AppendCors 添加是否跨域（debug模式开启）
@@ -54,12 +55,12 @@ func AppendServerStaticHtmlWithPrefix(router gin.IRouter, f embed.FS, pathPrefix
 				}
 
 				htmlContent := string(content)
-				
+
 				// 注入 base 标签和配置脚本
 				// base 标签必须在 head 的最前面，确保所有相对路径都基于这个 base
 				baseTag := fmt.Sprintf(`<base href="%s/">`, pathPrefix)
 				configScript := fmt.Sprintf(`<script>window.__URL_PATH_PREFIX__ = '%s';</script>`, pathPrefix)
-				
+
 				// 在 <head> 标签后立即插入 base 标签
 				htmlContent = strings.Replace(htmlContent, "<head>", "<head>"+baseTag, 1)
 				// 在 </head> 标签前注入配置
@@ -73,7 +74,7 @@ func AppendServerStaticHtmlWithPrefix(router gin.IRouter, f embed.FS, pathPrefix
 		// 无路径前缀时，使用原有逻辑
 		if r, ok := router.(*gin.Engine); ok {
 			r.Use(middleware.StaticCacheMiddleware())
-			r.StaticFS("/assets", http.FS(assets))
+			r.StaticFS("assets/", http.FS(assets))
 			r.GET("/", func(ctx *gin.Context) {
 				ctx.FileFromFS("/", http.FS(dist))
 			})
@@ -93,13 +94,13 @@ func InitRouter(f embed.FS) *gin.Engine {
 	app.Use(gin.Recovery())
 
 	AppendCors(app)
-	
+
 	// 获取 URL 前缀
 	pathPrefix := setting.ServerSetting.UrlPrefix
 	if pathPrefix != "" && pathPrefix[0] != '/' {
 		pathPrefix = "/" + pathPrefix
 	}
-	
+
 	// 如果有路径前缀，创建路由组
 	var router gin.IRouter
 	if pathPrefix != "" {
@@ -107,7 +108,7 @@ func InitRouter(f embed.FS) *gin.Engine {
 	} else {
 		router = app
 	}
-	
+
 	AppendServerStaticHtmlWithPrefix(router, f, pathPrefix)
 
 	router.POST("/auth", api.GetAuth)
@@ -171,7 +172,7 @@ func InitRouter(f embed.FS) *gin.Engine {
 		apiV1.POST("/templates/edit", v1.EditMessageTemplate)
 		apiV1.POST("/templates/delete", v1.DeleteMessageTemplate)
 		apiV1.POST("/templates/preview", v1.PreviewMessageTemplate)
-		
+
 		// messageTemplate instances
 		apiV1.GET("/templates/ins/get", v1.GetTemplateWithIns)
 		apiV1.POST("/templates/ins/addone", v1.AddTemplateIns)
