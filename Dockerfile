@@ -44,7 +44,7 @@ FROM debian:stable-slim
 ENV TZ=Asia/Shanghai
 
 RUN apt-get update \
-    && apt-get install -y ca-certificates tzdata mime-support \
+    && apt-get install -y ca-certificates tzdata media-types \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
